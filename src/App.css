@@ -1,0 +1,31 @@
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0e0c1a 0%, #151126 50%, #1f1a32 100%);
+  color: #f7f7ff;
+}
+
+.content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 140px 24px 48px;
+  text-align: left;
+}
+
+.content h1 {
+  margin: 0 0 0.5rem;
+  font-size: 2.75rem;
+  letter-spacing: -0.5px;
+}
+
+.content p {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #d6d4e4;
+}
