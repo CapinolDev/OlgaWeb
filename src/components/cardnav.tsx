@@ -35,8 +35,8 @@ const CardNav: React.FC<CardNavProps> = ({
   ease = "power3.out",
   baseColor = "#fff",
   menuColor,
-  buttonBgColor: _buttonBgColor,
-  buttonTextColor: _buttonTextColor,
+  buttonBgColor,
+  buttonTextColor,
 }) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
