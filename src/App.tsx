@@ -16,7 +16,6 @@ const normalizePath = (path: string) => {
 };
 
 const normalizeRouteFromGlob = (filePath: string) => {
-  // Turns "/src/kontakt/page.tsx" or "./kontakt/page.tsx" into "/kontakt"
   let normalized = filePath.replace(/^\.\/?/, "/");
   normalized = normalized.replace(/^\/?src\//, "/");
   normalized = normalized.replace(/\/page\.tsx$/, "");
@@ -37,12 +36,19 @@ function App() {
 
   const homePath = routes.has("/home") ? "/home" : null;
 
-  const [currentPath, setCurrentPath] = useState(() =>
-    normalizePath(window.location.pathname)
-  );
+  const [routeState, setRouteState] = useState(() => {
+    const initialPath = normalizePath(window.location.pathname);
+    return { path: initialPath, version: 0 };
+  });
+
+  const currentPath = routeState.path;
 
   useEffect(() => {
-    const handlePop = () => setCurrentPath(normalizePath(window.location.pathname));
+    const handlePop = () =>
+      setRouteState((prev) => ({
+        path: normalizePath(window.location.pathname),
+        version: prev.version + 1,
+      }));
     window.addEventListener("popstate", handlePop);
     return () => window.removeEventListener("popstate", handlePop);
   }, []);
@@ -72,13 +78,12 @@ function App() {
           ? `${homePath}${url.search}${url.hash}`
           : `${url.pathname}${url.search}${url.hash}`;
 
-      if (nextPath !== currentPath) {
-        window.history.pushState({}, "", historyPath);
-        setCurrentPath(nextPath);
-      } else {
-        // Still update state so components depending on the route can respond (e.g., toggle UI)
-        setCurrentPath(nextPath);
-      }
+      window.history.pushState({}, "", historyPath);
+
+      setRouteState((prev) => ({
+        path: nextPath,
+        version: nextPath === prev.path ? prev.version + 1 : 0,
+      }));
     };
 
     document.addEventListener("click", handleClick);
@@ -88,7 +93,10 @@ function App() {
   useEffect(() => {
     if (homePath && currentPath === "/") {
       window.history.replaceState({}, "", homePath);
-      setCurrentPath(homePath);
+      setRouteState((prev) => ({
+        path: homePath,
+        version: prev.version + 1,
+      }));
     }
   }, [currentPath, homePath]);
 
@@ -102,16 +110,20 @@ function App() {
           raysOrigin="top-center"
           raysColor="#ffffff"
           raysSpeed={0.04}
-          lightSpread={0.3}
-          rayLength={8}
-          fadeDistance={9}
+          lightSpread={0.45}
+          rayLength={80}
+          fadeDistance={20}
           mouseInfluence={1}
           followMouse
         />
       </div>
 
       <div className="page-shell">
-        <Navbar />
+        <Navbar
+          key={`${resolvedPath}-${routeState.version}`}
+          activePath={resolvedPath}
+          routeVersion={routeState.version}
+        />
         <main className="content">
           {ActivePage ? <ActivePage /> : <div>Page not found.</div>}
         </main>

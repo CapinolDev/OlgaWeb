@@ -1,6 +1,11 @@
 import CardNav from "./cardnav";
 
-const Navbar = () => {
+type NavbarProps = {
+  activePath?: string;
+  routeVersion?: number;
+};
+
+const Navbar = ({ activePath, routeVersion }: NavbarProps) => {
   const items = [
     {
       label: "O mně",
@@ -21,8 +26,8 @@ const Navbar = () => {
       textColor: "#fff",
       links: [
         {
-          label: "Pro Školy",
-          ariaLabel: "Pro Školy",
+          label: "Pro školy",
+          ariaLabel: "Pro školy",
           href: "/nabidka/skoly",
         },
         {
@@ -58,7 +63,17 @@ const Navbar = () => {
     },
   ];
 
-  return <CardNav items={items} baseColor="#fff" ease="power3.out" />;
+  return (
+    <CardNav
+      items={items}
+      baseColor="rgba(236, 214, 238, 0.01)"
+      ease="power3.out"
+      activePath={activePath}
+      routeVersion={routeVersion}
+      homeHref="/home"
+      homeLabel="Domů"
+    />
+  );
 };
 
 export default Navbar;

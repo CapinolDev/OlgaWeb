@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import "./cardnav.css";
 
@@ -17,16 +17,24 @@ export type CardNavItem = {
 
 export interface CardNavProps {
   items: CardNavItem[];
+  activePath?: string;
+  routeVersion?: number;
   className?: string;
   ease?: string;
   baseColor?: string;
+  homeHref?: string;
+  homeLabel?: string;
 }
 
 const CardNav: React.FC<CardNavProps> = ({
   items,
+  activePath,
+  routeVersion = 0,
   className = "",
   ease = "power3.out",
   baseColor = "#fff",
+  homeHref = "/home",
+  homeLabel = "Domů",
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -129,10 +137,6 @@ const CardNav: React.FC<CardNavProps> = ({
     tl.play(0);
   };
 
-  const setCardRef = (i: number) => (el: HTMLDivElement | null) => {
-    if (el) cardsRef.current[i] = el;
-  };
-
   const closeMenu = () => {
     const tl = tlRef.current;
     if (!tl) {
@@ -147,6 +151,10 @@ const CardNav: React.FC<CardNavProps> = ({
     });
 
     tl.reverse();
+  };
+
+  const setCardRef = (i: number) => (el: HTMLDivElement | null) => {
+    if (el) cardsRef.current[i] = el;
   };
 
   const handlePreviewClick = (idx: number) => {
@@ -173,6 +181,13 @@ const CardNav: React.FC<CardNavProps> = ({
     );
   };
 
+  // Close the menu whenever the route changes (even if it's the same path) so
+  // navigation from the navbar always leaves it in a predictable state.
+  useEffect(() => {
+    if (!isExpanded) return;
+    closeMenu();
+  }, [activePath, routeVersion]);
+
   return (
     <div
       className={`card-nav-container absolute left-1/2 -translate-x-1/2 w-[90%] max-w-[800px] z-[99] top-[1.2em] md:top-[2em] ${className}`}
@@ -185,6 +200,9 @@ const CardNav: React.FC<CardNavProps> = ({
         style={{ backgroundColor: baseColor }}
       >
         <div className="card-nav-top absolute inset-x-0 top-0 h-[60px] z-[2]">
+          <a className="card-nav-home" href={homeHref}>
+            {homeLabel}
+          </a>
           <div className="card-nav-mini-row">
             {items.map((item, idx) => (
               <button
@@ -236,6 +254,7 @@ const CardNav: React.FC<CardNavProps> = ({
                       className="nav-card-link inline-flex items-center gap-[6px] no-underline cursor-pointer transition-opacity duration-300 hover:opacity-75 text-[15px] md:text-[16px]"
                       href={lnk.href}
                       aria-label={lnk.ariaLabel}
+                      onClick={closeMenu}
                     >
                       {lnk.label}
                     </a>
