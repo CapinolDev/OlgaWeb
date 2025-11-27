@@ -1,5 +1,4 @@
 import CardNav from "./cardnav";
-import logo from "./../../public/olgaLogoBlack.svg";
 
 const Navbar = () => {
   const items = [
@@ -22,8 +21,8 @@ const Navbar = () => {
       textColor: "#fff",
       links: [
         {
-          label: "Pro školy",
-          ariaLabel: "Pro školy",
+          label: "Pro Školy",
+          ariaLabel: "Pro Školy",
           href: "/nabidka/skoly",
         },
         {
@@ -34,7 +33,7 @@ const Navbar = () => {
       ],
     },
     {
-      label: "Kontakt/Ceník",
+      label: "Kontakt",
       bgColor: "#271E37",
       textColor: "#fff",
       links: [
@@ -43,6 +42,13 @@ const Navbar = () => {
           ariaLabel: "Kontaktujte nás",
           href: "/kontakt",
         },
+      ],
+    },
+    {
+      label: "Ceník",
+      bgColor: "#36284D",
+      textColor: "#fff",
+      links: [
         {
           label: "Ceník",
           ariaLabel: "Ceník",
@@ -52,18 +58,7 @@ const Navbar = () => {
     },
   ];
 
-  return (
-    <CardNav
-      logo={logo}
-      logoAlt="Company Logo"
-      items={items}
-      baseColor="#fff"
-      menuColor="#000"
-      buttonBgColor="#111"
-      buttonTextColor="#fff"
-      ease="power3.out"
-    />
-  );
+  return <CardNav items={items} baseColor="#fff" ease="power3.out" />;
 };
 
 export default Navbar;

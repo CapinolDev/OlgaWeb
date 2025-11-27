@@ -1,0 +1,30 @@
+      textColor: "#fff",
+      links: [
+        {
+          label: "Pro školy",
+          ariaLabel: "Pro školy",
+          href: "/nabidka/skoly",
+        },
+        {
+          label: "Pro jednotlivce / rodinu",
+          ariaLabel: "Pro jednotlivce / rodinu",
+          href: "/nabidka/jednotlivec",
+        },
+      ],
+    },
+    {
+      label: "Kontakt/Ceník",
+      bgColor: "#271E37",
+      textColor: "#fff",
+      links: [
+        {
+          label: "Kontakt",
+          ariaLabel: "Kontaktujte nás",
+          href: "/kontakt",
+        },
+        {
+          label: "Ceník",
+          ariaLabel: "Ceník",
+          href: "/cenik",
+        },
+      ],
