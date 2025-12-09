@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Redirecting…</title>
+    <title>Redirecting...</title>
     <meta name="robots" content="noindex" />
     <meta http-equiv="refresh" content="0;url=/OlgaWeb/#/" />
     <script>
@@ -14,15 +14,17 @@
         if (path.startsWith(base)) {
           path = path.slice(base.length) || "/";
         }
-        var target = base + "/#"
-          + (path.startsWith("/") ? path : "/" + path)
-          + search
-          + hash;
+        var target =
+          base +
+          "/#" +
+          (path.startsWith("/") ? path : "/" + path) +
+          search +
+          hash;
         window.location.replace(target);
       })();
     </script>
   </head>
   <body>
-    Redirecting…
+    Redirecting...
   </body>
 </html>
