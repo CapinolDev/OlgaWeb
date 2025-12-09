@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting…</title>
+    <meta name="robots" content="noindex" />
+    <meta http-equiv="refresh" content="0;url=/OlgaWeb/#/" />
+    <script>
+      (function () {
+        var path = window.location.pathname || "/";
+        var search = window.location.search || "";
+        var hash = window.location.hash || "";
+        var base = "/OlgaWeb";
+        if (path.startsWith(base)) {
+          path = path.slice(base.length) || "/";
+        }
+        var target = base + "/#"
+          + (path.startsWith("/") ? path : "/" + path)
+          + search
+          + hash;
+        window.location.replace(target);
+      })();
+    </script>
+  </head>
+  <body>
+    Redirecting…
+  </body>
+</html>
