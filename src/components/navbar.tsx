@@ -11,7 +11,7 @@ const Navbar = ({ activePath, routeVersion }: NavbarProps) => {
 
   const items = [
     {
-      label: "O mn�>",
+      label: "O mně",
       bgColor: "#0D0716",
       textColor: "#fff",
       links: [
@@ -21,20 +21,20 @@ const Navbar = ({ activePath, routeVersion }: NavbarProps) => {
           href: withHash("/about/praxe"),
         },
         {
-          label: "Vzd�>lA�nA-",
-          ariaLabel: "Moje vzd�>lA�nA-",
+          label: "Vzdělání",
+          ariaLabel: "Moje vzdělání",
           href: withHash("/about/vzdelani"),
         },
       ],
     },
     {
-      label: "NabA-dka",
+      label: "Nabídka",
       bgColor: "#170D27",
       textColor: "#fff",
       links: [
         {
-          label: "Pro ��koly",
-          ariaLabel: "Pro ��koly",
+          label: "Pro Školy",
+          ariaLabel: "Pro školy",
           href: withHash("/nabidka/skoly"),
         },
         {
@@ -57,13 +57,13 @@ const Navbar = ({ activePath, routeVersion }: NavbarProps) => {
       ],
     },
     {
-      label: "CenA-k",
+      label: "Ceník",
       bgColor: "#36284D",
       textColor: "#fff",
       links: [
         {
-          label: "CenA-k",
-          ariaLabel: "CenA-k",
+          label: "Ceník",
+          ariaLabel: "Ceník",
           href: withHash("/cenik"),
         },
       ],
@@ -78,7 +78,7 @@ const Navbar = ({ activePath, routeVersion }: NavbarProps) => {
       activePath={activePath}
       routeVersion={routeVersion}
       homeHref={withHash("/home")}
-      homeLabel="Dom�_"
+      homeLabel="Domů"
     />
   );
 };
