@@ -8,11 +8,30 @@ const pageModules = import.meta.glob("./**/page.tsx", {
   eager: true,
 }) as Record<string, { default: ComponentType<any> }>;
 
+const rawBasePath = (import.meta.env.BASE_URL || "/").replace(/\/+$/, "");
+const basePath = rawBasePath === "/" ? "" : rawBasePath;
+
+const stripBasePath = (pathname: string) => {
+  if (!basePath) return pathname || "/";
+  if (pathname.startsWith(basePath)) {
+    const stripped = pathname.slice(basePath.length);
+    if (stripped === "") return "/";
+    return stripped.startsWith("/") ? stripped : `/${stripped}`;
+  }
+  return pathname || "/";
+};
+
 const normalizePath = (path: string) => {
   if (!path) return "/";
-  const url = new URL(path, window.location.origin);
-  const cleaned = url.pathname.replace(/\/+$/, "");
-  return cleaned === "" ? "/" : cleaned;
+  const withoutHash = path.replace(/^#/, "");
+  const cleaned = withoutHash.replace(/\/+$/, "");
+  if (cleaned === "") return "/";
+  return cleaned.startsWith("/") ? cleaned : `/${cleaned}`;
+};
+
+const hashForRoute = (route: string) => {
+  const normalized = normalizePath(route);
+  return normalized === "/" ? "#/" : `#${normalized}`;
 };
 
 const normalizeRouteFromGlob = (filePath: string) => {
@@ -37,20 +56,27 @@ function App() {
   const homePath = routes.has("/home") ? "/home" : null;
 
   const [routeState, setRouteState] = useState(() => {
-    const initialPath = normalizePath(window.location.pathname);
+    const initialPath = normalizePath(
+      window.location.hash || stripBasePath(window.location.pathname)
+    );
     return { path: initialPath, version: 0 };
   });
 
   const currentPath = routeState.path;
 
   useEffect(() => {
-    const handlePop = () =>
+    const syncFromLocation = () => {
+      const nextPath = normalizePath(
+        window.location.hash || stripBasePath(window.location.pathname)
+      );
       setRouteState((prev) => ({
-        path: normalizePath(window.location.pathname),
-        version: prev.version + 1,
+        path: nextPath,
+        version: nextPath === prev.path ? prev.version + 1 : 0,
       }));
-    window.addEventListener("popstate", handlePop);
-    return () => window.removeEventListener("popstate", handlePop);
+    };
+
+    window.addEventListener("hashchange", syncFromLocation);
+    return () => window.removeEventListener("hashchange", syncFromLocation);
   }, []);
 
   useEffect(() => {
@@ -66,37 +92,40 @@ function App() {
       const url = new URL(href, window.location.href);
       if (url.origin !== window.location.origin) return;
 
-      let nextPath = normalizePath(url.pathname);
+      let nextPath = normalizePath(stripBasePath(url.pathname));
       if (homePath && nextPath === "/") {
         nextPath = homePath;
       }
 
       e.preventDefault();
 
-      const historyPath =
-        homePath && nextPath === homePath
-          ? `${homePath}${url.search}${url.hash}`
-          : `${url.pathname}${url.search}${url.hash}`;
-
-      window.history.pushState({}, "", historyPath);
+      const desiredHash = hashForRoute(nextPath);
+      if (window.location.hash !== desiredHash) {
+        window.location.hash = desiredHash;
+        return;
+      }
 
       setRouteState((prev) => ({
         path: nextPath,
-        version: nextPath === prev.path ? prev.version + 1 : 0,
+        version: prev.version + 1,
       }));
     };
 
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
-  }, [currentPath, homePath]);
+  }, [homePath]);
 
   useEffect(() => {
     if (homePath && currentPath === "/") {
-      window.history.replaceState({}, "", homePath);
-      setRouteState((prev) => ({
-        path: homePath,
-        version: prev.version + 1,
-      }));
+      const targetHash = hashForRoute(homePath);
+      if (window.location.hash !== targetHash) {
+        window.location.hash = targetHash;
+      } else {
+        setRouteState((prev) => ({
+          path: homePath,
+          version: prev.version + 1,
+        }));
+      }
     }
   }, [currentPath, homePath]);
 

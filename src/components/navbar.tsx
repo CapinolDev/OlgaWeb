@@ -6,34 +6,41 @@ type NavbarProps = {
 };
 
 const Navbar = ({ activePath, routeVersion }: NavbarProps) => {
+  const withHash = (path: string) =>
+    path === "/" ? "#/" : `#${path.startsWith("/") ? path : `/${path}`}`;
+
   const items = [
     {
-      label: "O mně",
+      label: "O mn�>",
       bgColor: "#0D0716",
       textColor: "#fff",
       links: [
-        { label: "Praxe", ariaLabel: "Moje praxe", href: "/about/praxe" },
         {
-          label: "Vzdělání",
-          ariaLabel: "Moje vzdělání",
-          href: "/about/vzdelani",
+          label: "Praxe",
+          ariaLabel: "Moje praxe",
+          href: withHash("/about/praxe"),
+        },
+        {
+          label: "Vzd�>lA�nA-",
+          ariaLabel: "Moje vzd�>lA�nA-",
+          href: withHash("/about/vzdelani"),
         },
       ],
     },
     {
-      label: "Nabídka",
+      label: "NabA-dka",
       bgColor: "#170D27",
       textColor: "#fff",
       links: [
         {
-          label: "Pro školy",
-          ariaLabel: "Pro školy",
-          href: "/nabidka/skoly",
+          label: "Pro ��koly",
+          ariaLabel: "Pro ��koly",
+          href: withHash("/nabidka/skoly"),
         },
         {
           label: "Pro jednotlivce / rodinu",
           ariaLabel: "Pro jednotlivce / rodinu",
-          href: "/nabidka/jednotlivec",
+          href: withHash("/nabidka/jednotlivec"),
         },
       ],
     },
@@ -44,20 +51,20 @@ const Navbar = ({ activePath, routeVersion }: NavbarProps) => {
       links: [
         {
           label: "Kontakt",
-          ariaLabel: "Kontaktujte nás",
-          href: "/kontakt",
+          ariaLabel: "Kontaktujte nA�s",
+          href: withHash("/kontakt"),
         },
       ],
     },
     {
-      label: "Ceník",
+      label: "CenA-k",
       bgColor: "#36284D",
       textColor: "#fff",
       links: [
         {
-          label: "Ceník",
-          ariaLabel: "Ceník",
-          href: "/cenik",
+          label: "CenA-k",
+          ariaLabel: "CenA-k",
+          href: withHash("/cenik"),
         },
       ],
     },
@@ -70,8 +77,8 @@ const Navbar = ({ activePath, routeVersion }: NavbarProps) => {
       ease="power3.out"
       activePath={activePath}
       routeVersion={routeVersion}
-      homeHref="/home"
-      homeLabel="Domů"
+      homeHref={withHash("/home")}
+      homeLabel="Dom�_"
     />
   );
 };
